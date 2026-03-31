@@ -43,7 +43,7 @@ button.addEventListener("click", async () => {
 
   // Show loading message while waiting for AI
   responseDiv.textContent = "Thinking...";
-  
+
   // =====================================
   // STEP 4: Connect to the AI
   // =====================================
@@ -59,16 +59,15 @@ button.addEventListener("click", async () => {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       // TODO: Set the HTTP method to POST (this is required for sending data to the API)
       // YOUR CODE HERE
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${api_key}`
-        },
-      body:JSON.stringify({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${api_key}`,
+      },
+      body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages: [{role: "user", content: userQuestion}]
-      }) 
-    
+        messages: [{ role: "user", content: userQuestion }],
+      }),
 
       // TODO: Add a headers object with TWO properties:
       //       1. Content-Type header set to "application/json" (tells API we're sending JSON)
@@ -88,15 +87,21 @@ button.addEventListener("click", async () => {
     // TODO: Check if the API response was successful
     //       If not successful (!res.ok), throw an error with the status code
     // YOUR CODE HERE
+    if (!res.ok) {
+      throw new Error(`API request failed with status ${res.status}`);
+    }
 
     // TODO: Parse the JSON response from the API
     //       Store the result in a variable called 'data'
     // YOUR CODE HERE
+    const data = await res.json();
 
     // TODO: Extract and display the AI's response
     //       OpenAI returns the message in: data.choices[0].message.content
     //       Set responseDiv.textContent to show this to the user
     // YOUR CODE HERE
+    responseDiv.textContent =
+      data.choices?.[0]?.message?.content || "No response received.";
   } catch (error) {
     // TODO: Handle errors gracefully by doing TWO things:
     //       1. Log the error to the console so you can debug (use console.error)
@@ -104,7 +109,9 @@ button.addEventListener("click", async () => {
     // YOUR CODE HERE
     console.error(error);
     responseDiv.textContent = "Sorry, something went wrong. Please try again.";
-    alert("An error occurred while fetching the AI response. Please check your network connection and the console for more details.");
+    alert(
+      "An error occurred while fetching the AI response. Please check your network connection and the console for more details.",
+    );
   }
 });
 
