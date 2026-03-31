@@ -62,12 +62,12 @@ button.addEventListener("click", async () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${api_key}`
         },
       body:JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [{role: "user", content: userQuestion}]
       }) 
-    
     
 
       // TODO: Add a headers object with TWO properties:
@@ -102,6 +102,9 @@ button.addEventListener("click", async () => {
     //       1. Log the error to the console so you can debug (use console.error)
     //       2. Show a user-friendly error message in responseDiv
     // YOUR CODE HERE
+    console.error(error);
+    responseDiv.textContent = "Sorry, something went wrong. Please try again.";
+    alert("An error occurred while fetching the AI response. Please check your network connection and the console for more details.");
   }
 });
 
