@@ -36,7 +36,7 @@ button.addEventListener("click", async () => {
   // - Update the responseDiv element to show your message
   // - Use the return keyword to exit the function early
   // YOUR CODE HERE
-
+  
   // Show loading message while waiting for AI
   responseDiv.textContent = "Thinking...";
 
