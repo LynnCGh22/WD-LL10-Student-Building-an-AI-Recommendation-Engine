@@ -36,10 +36,14 @@ button.addEventListener("click", async () => {
   // - Update the responseDiv element to show your message
   // - Use the return keyword to exit the function early
   // YOUR CODE HERE
-  
+  if (!userQuestion) {
+    responseDiv.textContent = "Please enter a question.";
+    return;
+  }
+
   // Show loading message while waiting for AI
   responseDiv.textContent = "Thinking...";
-
+  
   // =====================================
   // STEP 4: Connect to the AI
   // =====================================
@@ -55,6 +59,17 @@ button.addEventListener("click", async () => {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       // TODO: Set the HTTP method to POST (this is required for sending data to the API)
       // YOUR CODE HERE
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      body:JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{role: "user", content: userQuestion}]
+      }) 
+    
+    
+
       // TODO: Add a headers object with TWO properties:
       //       1. Content-Type header set to "application/json" (tells API we're sending JSON)
       //       2. Authorization header with format: "Bearer <your-api-key-variable>"
