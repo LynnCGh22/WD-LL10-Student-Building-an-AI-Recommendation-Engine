@@ -101,6 +101,13 @@ button.addEventListener("click", async () => {
     // TODO: Parse the JSON response from the Cloudflare Worker
     //       Store the result in a variable called 'data'
     // YOUR CODE HERE
+    const contentType = res.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      // This helps you quickly diagnose a Worker that is still using starter code
+      // (for example, returning "Hello World!" instead of JSON).
+      const rawText = await res.text();
+      throw new Error(`Worker returned non-JSON response: ${rawText}`);
+    }
     const data = await res.json();
 
     // TODO: Extract and display the AI's response
@@ -108,14 +115,29 @@ button.addEventListener("click", async () => {
     //       Set responseDiv.textContent to show this to the user
     // YOUR CODE HERE
     responseDiv.textContent =
-      data.choices?.[0]?.message?.content || "No response received.";
+      data.choices?.[0]?.message?.content ||
+      data.reply ||
+      data.response ||
+      "No response received.";
   } catch (error) {
     // TODO: Handle errors gracefully by doing TWO things:
     //       1. Log the error to the console so you can debug (use console.error)
     //       2. Show a user-friendly error message in responseDiv
     // YOUR CODE HERE
     console.error(error);
-    responseDiv.textContent = "Sorry, something went wrong. Please try again.";
+
+    // Show clearer guidance for the most common Cloudflare Worker setup issues.
+    if (error instanceof TypeError) {
+      responseDiv.textContent =
+        "Connection blocked. This is usually a CORS issue in your Cloudflare Worker.";
+    } else if (error instanceof Error && error.message.includes("non-JSON")) {
+      responseDiv.textContent =
+        "Connected to Worker, but it is not returning AI JSON yet. Check Worker code.";
+    } else {
+      responseDiv.textContent =
+        "Sorry, something went wrong. Please try again.";
+    }
+
     alert(
       "An error occurred while fetching the AI response. Please check your network connection and the console for more details.",
     );
