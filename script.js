@@ -5,9 +5,8 @@
 // YOUR MISSION: Complete the TODOs below to build
 // your AI-powered recommendation engine!
 //
-// ⚠️  SETUP REQUIRED: Before you begin, make sure your secrets.js file contains:
-//    const api_key = "your-openai-api-key-here";
-//    (Replace "your-openai-api-key-here" with your actual API key)
+// ✅ SETUP COMPLETE: Your Cloudflare Worker is configured as a secure backend!
+//    The API key is safely stored on the backend, not in your frontend code.
 // =====================================
 
 // =====================================
@@ -45,24 +44,22 @@ button.addEventListener("click", async () => {
   responseDiv.textContent = "Thinking...";
 
   // =====================================
-  // STEP 4: Connect to the AI
+  // STEP 4: Connect to the AI via Cloudflare Worker
   // =====================================
-  // IMPORTANT: Before starting, make sure your secrets.js file contains:
-  // const api_key = "your-actual-api-key-here";
-  //
-  // The variable name 'api_key' MUST match what you use in the Authorization header below!
-  // ⚠️  CRITICAL: If you use Authorization: `Bearer ${api_key}`, then your secrets.js
-  //    must have: const api_key = "your-key-here"
+  // Your Cloudflare Worker securely handles the OpenAI API connection!
+  // The API key is stored safely on the backend, never exposed to the frontend.
+  // This worker acts as a secure proxy between your frontend and OpenAI.
 
-  // TODO: Complete the fetch request below to send the user's question to OpenAI
+  // TODO: Complete the fetch request below to send the user's question to the Cloudflare Worker
   try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    const res = await fetch("https://divine-sea-b20e.lchaker921.workers.dev/", {
       // TODO: Set the HTTP method to POST (this is required for sending data to the API)
       // YOUR CODE HERE
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${api_key}`,
+        // Note: The Authorization header is NOT needed here because the Cloudflare Worker
+        // handles authentication with OpenAI on the backend!
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
@@ -80,18 +77,17 @@ button.addEventListener("click", async () => {
         presence_penalty: 0.2, // Slightly encourage diversity for more varied responses
       }),
 
-      // TODO: Add a headers object with TWO properties:
+      // TODO: Add a headers object with ONE property:
       //       1. Content-Type header set to "application/json" (tells API we're sending JSON)
-      //       2. Authorization header with format: "Bearer <your-api-key-variable>"
-      //          Use template literals with ${} to insert your api_key variable
-      //          ⚠️  The variable name you use here MUST exist in secrets.js!
+      //       ⚠️  NO Authorization header needed! The Cloudflare Worker handles that securely!
       // YOUR CODE HERE
-      // TODO: Add a body property that sends JSON data to the API
+      // TODO: Add a body property that sends JSON data to the Cloudflare Worker
       //       Use JSON.stringify() to convert an object with these properties:
       //       - model: which AI model to use (use "gpt-3.5-turbo" for this lab)
       //       - messages: an array with ONE message object containing:
       //           * role: set to "user" (tells AI this is from the user)
       //           * content: use the userQuestion variable (the user's input)
+      //       - max_completion_tokens, temperature, frequency_penalty, presence_penalty: for fine-tuning responses
       // YOUR CODE HERE
     });
 
@@ -102,7 +98,7 @@ button.addEventListener("click", async () => {
       throw new Error(`API request failed with status ${res.status}`);
     }
 
-    // TODO: Parse the JSON response from the API
+    // TODO: Parse the JSON response from the Cloudflare Worker
     //       Store the result in a variable called 'data'
     // YOUR CODE HERE
     const data = await res.json();
@@ -120,6 +116,10 @@ button.addEventListener("click", async () => {
     // YOUR CODE HERE
     console.error(error);
     responseDiv.textContent = "Sorry, something went wrong. Please try again.";
+    alert(
+      "An error occurred while fetching the AI response. Please check your network connection and the console for more details.",
+    );
+  }
     alert(
       "An error occurred while fetching the AI response. Please check your network connection and the console for more details.",
     );
