@@ -70,11 +70,14 @@ button.addEventListener("click", async () => {
           {
             role: "system",
             content:
-              "You are a professional workplace assistant. Use a formal, serious tone. Structure responses clearly with concise sections using headings when helpful, and provide direct, practical recommendations. Avoid slang, jokes, emojis, and overly casual phrasing.",
+              "You are a professional workplace assistant. Use a formal, serious tone. Structure responses clearly with concise sections using headings when helpful, and provide direct, practical recommendations. Avoid slang, jokes, emojis, and overly casual phrasing, and do not diverge too far from the topic.",
           },
           { role: "user", content: userQuestion },
         ],
         max_completion_tokens: 500, // Limit response length for better performance
+        temperature: 0.2, // Lower temperature for more focused, deterministic responses
+        frequency_penalty: 0.2, // Slightly discourage repetition for more varied responses
+        presence_penalty: 0.2, // Slightly encourage diversity for more varied responses
       }),
 
       // TODO: Add a headers object with TWO properties:
