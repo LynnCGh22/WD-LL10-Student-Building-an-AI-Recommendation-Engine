@@ -66,7 +66,14 @@ button.addEventListener("click", async () => {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: userQuestion }],
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a professional workplace assistant. Use a formal, serious tone. Structure responses clearly with concise sections using headings when helpful, and provide direct, practical recommendations. Avoid slang, jokes, emojis, and overly casual phrasing.",
+          },
+          { role: "user", content: userQuestion },
+        ],
       }),
 
       // TODO: Add a headers object with TWO properties:
