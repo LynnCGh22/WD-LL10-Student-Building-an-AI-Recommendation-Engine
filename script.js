@@ -74,7 +74,7 @@ button.addEventListener("click", async () => {
           },
           { role: "user", content: userQuestion },
         ],
-        max_completion_tokens: 200, // Limit response length for better performance
+        max_completion_tokens: 500, // Limit response length for better performance
       }),
 
       // TODO: Add a headers object with TWO properties:
