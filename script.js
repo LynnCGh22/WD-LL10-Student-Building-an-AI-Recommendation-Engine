@@ -124,7 +124,7 @@ button.addEventListener("click", async () => {
       "An error occurred while fetching the AI response. Please check your network connection and the console for more details.",
     );
   }
-});
+);
 
 // =====================================
 // INSTRUCTOR TALKING POINTS
